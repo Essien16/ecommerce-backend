@@ -2,6 +2,7 @@ const express = require("express");
 const Joi = require("joi");
 const Product = require("../models/Product");
 const router = express.Router();
+const { isAdmin } = require("../middleware/protect");
 
 router.get("/", async(req, res) => {
     const product = await Product.find()
@@ -15,7 +16,7 @@ router.get("/:id", async(req, res) => {
     res.send(product);
 });
 
-router.post("/", async(req, res) => {
+router.post("/", isAdmin, async(req, res) => {
     const { error } = validateProduct(req.body);
     if (error) return res.status(400).send(details[0].message);
 
@@ -29,7 +30,7 @@ router.post("/", async(req, res) => {
     res.send(product);
 });
 
-router.put("/:id", async(req, res) => {
+router.put("/:id", isAdmin, async(req, res) => {
     const { error } = validateProduct(req.body);
     if ( error ) return res.status(400).send(details[0].message);
 
@@ -39,12 +40,12 @@ router.put("/:id", async(req, res) => {
     res.send(product);
 });
 
-router.delete("/:id", async(req, res) => {
+router.delete("/:id", isAdmin, async(req, res) => {
     const product = await Product.findByIdAndRemove(req.params.id)
     if (!product) return res.status(404).send("The product with the given ID does not exist");
 
     res.send(product);
-})
+});
 
 
 
@@ -56,12 +57,6 @@ function validateProduct(product) {
         inventory: Joi.number()
     });
     return schema.validate(product);
-}
-
-
-
-
-
-
+};
 
 module.exports = router;

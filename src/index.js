@@ -1,7 +1,8 @@
 const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
-const product = require("./routes/product")
+const product = require("./routes/product");
+const login = require("./routes/login");
 const dotenv = require("dotenv");
 dotenv.config();
 
@@ -12,6 +13,7 @@ mongoose.connect(db, {useUnifiedTopology: true, useNewUrlParser: true })
 
 app.use(express.json())
 app.use("/api/products", product);
+app.use("/", login);
 
 
 const port = process.env.PORT || 7000;
