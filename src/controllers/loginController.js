@@ -21,13 +21,6 @@ const signUpUser = async (req, res) => {
         if (user) {
           console.log("User with this email exists");
           res.status(409).send("User with this email exists")
-        //   res.render("signup", {
-        //     name,
-        //     email,
-        //     password,
-        //     confirm,
-        //     isAdmin
-        //   });
         } else {
           const newUser = new User({
             name,
@@ -65,11 +58,6 @@ const loginUser = async (req, res) => {
         return res.status(200).send({tokenObject})
       } else return res.status(400).send("Invalid email or password")
       }
-    //   const validatePassword = await bcrypt.compare(req.body.password, user.password);
-    //   if (validatePassword) {
-    //     const tokenObject = jwtToken(User);
-    //     return res.status(200).send({tokenObject})
-    //   } else return res.status(400).send("Invalid email or password")
   } catch (error) {
     console.log(error.message);
   }
