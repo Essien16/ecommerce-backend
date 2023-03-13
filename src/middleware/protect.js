@@ -4,7 +4,7 @@ const auth = (req, res, next) => {
         const authHeader = req.headers.authorization;
       
         if (!authHeader || !authHeader.startsWith('Bearer ')) {
-          return res.status(401).json({ message: 'Authorization header missing or has incorrect format' });
+          return res.status(401).json({ message: 'Access denied' });
         }
         const token = authHeader.split(' ')[1];
         req.token = token;
