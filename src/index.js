@@ -1,10 +1,9 @@
 const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
+const user = require("./routes/user");
+const admin = require("./routes/admin");
 const morgan = require("morgan");
-const product = require("./routes/product");
-const login = require("./routes/login");
-const cart = require("./routes/cart");
 const dotenv = require("dotenv");
 dotenv.config();
 
@@ -14,10 +13,10 @@ mongoose.connect(db, {useUnifiedTopology: true, useNewUrlParser: true })
 .catch(error => console.log(error));
 
 app.use(express.json());
-app.use(express.urlencoded({ extended:true }))
-app.use("/api/products", product);
-app.use("/", login);
-app.use("/cart", cart);
+app.use(express.urlencoded({ extended:true }));
+
+app.use(user);
+app.use(admin);
 
 
 if (app.get("env") === "development") {

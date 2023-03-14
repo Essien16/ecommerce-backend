@@ -1,22 +1,11 @@
 const express = require("express");
-const Joi = require("joi");
-const Product = require("../models/Product");
 const router = express.Router();
+const Joi = require("joi");
+const { signUpAdmin, loginAdmin } = require("../controllers/admin/adminController");
 const { isAdmin } = require("../middleware/protect");
+const Product = require("../models/Product");
 
-router.get("/", async(req, res) => {
-    const product = await Product.find()
-    res.send(product)
-});
-
-router.get("/:id", async(req, res) => {
-    const product = await Product.findById(req.params.id)
-    if (!product) return res.status(404).send("The product with the given ID does not exists.");
-
-    res.send(product);
-});
-
-router.post("/", isAdmin, async(req, res) => {
+router.post("/api/products", isAdmin, async(req, res) => {
     const { error } = validateProduct(req.body);
     if (error) return res.status(400).send(details[0].message);
 
@@ -30,7 +19,7 @@ router.post("/", isAdmin, async(req, res) => {
     res.send(product);
 });
 
-router.put("/:id", isAdmin, async(req, res) => {
+router.put("/api/products/:id", isAdmin, async(req, res) => {
     const { error } = validateProduct(req.body);
     if ( error ) return res.status(400).send(details[0].message);
 
@@ -40,14 +29,12 @@ router.put("/:id", isAdmin, async(req, res) => {
     res.send(product);
 });
 
-router.delete("/:id", isAdmin, async(req, res) => {
+router.delete("/api/prducts/:id", isAdmin, async(req, res) => {
     const product = await Product.findByIdAndRemove(req.params.id)
     if (!product) return res.status(404).send("The product with the given ID does not exist");
 
     res.send(product);
 });
-
-
 
 function validateProduct(product) {
     const schema = Joi.object({
@@ -58,5 +45,9 @@ function validateProduct(product) {
     });
     return schema.validate(product);
 };
+
+router.post("/admin/signup", signUpAdmin);
+router.post("/admin", loginAdmin);
+
 
 module.exports = router;

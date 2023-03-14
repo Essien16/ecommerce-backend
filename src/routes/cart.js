@@ -1,15 +1,29 @@
 const express = require("express");
 const router = express.Router();
 const Cart = require("../models/Cart");
+const CartItem = require("../models/CartItem");
 
-router.post("/", async(req, res) => {
-    item = new Cart(req.body);
-    await item.save();
+router.post('/carts/:cartId/items', async (req, res) => {
+    const { cartId } = req.params;
+    const { productId, quantity } = req.body;
+
+    const cartItem = new CartItem({
+      product: productId,
+      quantity,
+    });
+
+    const cart = await Cart.findById(cartId);
+    cart.items.push(cartItem);
+ 
+    await Promise.all([cart.save(), cartItem.save()]);
+  
+    res.status(201).json(cartItem);
 });
 
-router.get("/:id", async(req,res) => {
-    const cart = await Cart.findById(req.params.id);
-    res.send(cart)
+router.get("/carts/:cartId", async(req,res) => {
+    const { cartId } = req.params;
+    const cart = await Cart.findById(cartId).populate('items');
+    res.send(cart);
 });
 
 router.delete("/:id", async(req, res) => {

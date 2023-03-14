@@ -1,8 +1,7 @@
-const User = require("../models/User");
+const User = require("../../models/User");
 const bcrypt = require("bcryptjs");
 const Joi = require('joi');
 const jwt = require("jsonwebtoken");
-const { isAdmin } = require("../middleware/protect");
 
 const signUpUser = async (req, res) => {
     const { name, email, password, confirm } = req.body;
