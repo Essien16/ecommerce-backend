@@ -1,8 +1,10 @@
 const express = require("express");
+const session = require("express-session");
 const app = express();
 const mongoose = require("mongoose");
 const user = require("./routes/user");
 const admin = require("./routes/admin");
+const cart = require("./routes/cart");
 const morgan = require("morgan");
 const dotenv = require("dotenv");
 dotenv.config();
@@ -14,9 +16,15 @@ mongoose.connect(db, {useUnifiedTopology: true, useNewUrlParser: true })
 
 app.use(express.json());
 app.use(express.urlencoded({ extended:true }));
+app.use(session({
+    secret:'randomstuff',
+    saveUninitialized: true,
+    resave: true
+  }));
 
 app.use(user);
 app.use(admin);
+app.use(cart);
 
 
 if (app.get("env") === "development") {

@@ -1,5 +1,14 @@
 const jwt = require("jsonwebtoken");
 
+const authenticate = (req, res, next) => {
+    if (req.isAuthenticated()) {
+      next();
+    } else {
+        console.log("Please login to continue...")
+      res.redirect('/login');
+    }
+  }; 
+
 const auth = (req, res, next) => {
     const authHeader = req.headers.authorization;
       
@@ -29,4 +38,4 @@ const isAdmin = (req, res, next) => {
     })
 };
 
-module.exports = { auth, isAdmin};
+module.exports = { authenticate, auth, isAdmin};

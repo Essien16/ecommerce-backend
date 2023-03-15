@@ -3,22 +3,43 @@ const router = express.Router();
 const Cart = require("../models/Cart");
 const CartItem = require("../models/CartItem");
 
-router.post('/carts/:cartId/items', async (req, res) => {
-    const { cartId } = req.params;
+
+router.post("/cart", async (req, res) => {
     const { productId, quantity } = req.body;
-
     const cartItem = new CartItem({
-      product: productId,
-      quantity,
+        product: productId,
+        quantity,
     });
-
-    const cart = await Cart.findById(cartId);
-    cart.items.push(cartItem);
- 
-    await Promise.all([cart.save(), cartItem.save()]);
   
-    res.status(201).json(cartItem);
-});
+    try {
+        const userId = req.headers['x-user-id'];
+        console.log(userId)
+        let cart = await Cart.findOne({ userId });
+  
+        if (cart) {
+            let index = cart.items.findIndex((cartItem) => cartItem.productId === productId);
+  
+        if (index !== -1) {
+            cart.items[index].quantity += quantity;
+        } else {
+            cart.items.push(cartItem);
+        }
+        cart = await cart.save();
+        return res.status(201).send(cart);
+      } else {
+            const newCart = await Cart.create({
+            userId,
+            products: [{ productId, quantity }]
+        });
+  
+        return res.status(201).send(newCart);
+      }
+    } catch (err) {
+        console.log(err);
+        res.status(500).send("There is an error.");
+    }
+  });
+  
 
 router.get("/carts/:cartId", async(req,res) => {
     const { cartId } = req.params;
