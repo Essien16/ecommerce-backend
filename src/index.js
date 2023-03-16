@@ -4,6 +4,7 @@ const app = express();
 const mongoose = require("mongoose");
 const user = require("./routes/user");
 const admin = require("./routes/admin");
+const passport = require("passport")
 const cart = require("./routes/cart");
 const morgan = require("morgan");
 const dotenv = require("dotenv");
@@ -20,7 +21,9 @@ app.use(session({
     secret:'randomstuff',
     saveUninitialized: true,
     resave: true
-  }));
+}));
+app.use(passport.initialize());
+app.use(passport.session());
 
 app.use(user);
 app.use(admin);

@@ -20,9 +20,9 @@ const auth = (req, res, next) => {
       
     try{
         const secretKey = process.env.JWT_SECRET_KEY;
-        const user = jwt.verify(token, secretKey);
+        const user = jwt.verify(token, secretKey)
         req.user = user;
-        return next()
+        next();
     } catch(error){
         res.status(400).send("Invalid authentication token");
     }

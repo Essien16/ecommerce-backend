@@ -14,6 +14,10 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: false
     },
+    cart: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Cart"
+    }
 });
 
 const User = mongoose.model("User", userSchema);

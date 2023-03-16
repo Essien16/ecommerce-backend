@@ -49,7 +49,7 @@ const loginUser = async (req, res) => {
         return res.status(400).send("Please fill in all the fields");
       };
       const user = await User.findOne({email:email})
-      // console.log(req.body)
+      // console.log(user)
       if (user){
         const validatePassword = await bcrypt.compare(req.body.password, user.password);
       if (validatePassword) {
