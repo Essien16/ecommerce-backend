@@ -4,7 +4,7 @@ const {createCart, getCart, deleteCart, removeItem} = require("../controllers/us
 const {auth} = require("../middleware/protect");
 
 router.post("/api/cart", auth, createCart);
-router.post("/api/cart/removeitem",auth, removeItem);
+router.post("/api/cart/removeitem/:itemId", auth, removeItem);
 router.get("/api/cart/:cartId", getCart);
 router.delete("/api/cart/:cartId", deleteCart);
 

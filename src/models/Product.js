@@ -16,6 +16,11 @@ const productSchema = new mongoose.Schema({
     inventory: {
         type: Number,
         required: true
+    },
+    category: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Collection",
+        required: true
     }
 });
 

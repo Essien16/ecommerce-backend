@@ -63,7 +63,7 @@ const deleteCart = async (req, res) => {
 const removeItem = async (req, res) => {
     try {
         const userId = req.user.id; 
-        const { itemId } = req.body;
+        const { itemId } = req.params;
         const cart = await Cart.findOne({ user: userId });
         if (!cart) {
             return res.status(404).send('Cart not found');
