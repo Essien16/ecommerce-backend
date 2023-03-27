@@ -6,6 +6,7 @@ const user = require("./routes/user");
 const admin = require("./routes/admin");
 const passport = require("passport")
 const cart = require("./routes/cart");
+const search = require("./routes/search");
 const morgan = require("morgan");
 const dotenv = require("dotenv");
 dotenv.config();
@@ -28,6 +29,7 @@ app.use(passport.session());
 app.use(user);
 app.use(admin);
 app.use(cart);
+app.use(search);
 
 
 if (app.get("env") === "development") {
